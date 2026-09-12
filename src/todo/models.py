@@ -4,6 +4,7 @@ from datetime import datetime
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
 from uuid import UUID
 from sqlalchemy import ForeignKey
+import uuid
 
 """
 Why we have base

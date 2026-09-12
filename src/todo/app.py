@@ -7,10 +7,18 @@ import shutil
 import os
 import uuid
 import uvicorn
-from todo.schemas import TodoCreate
+from todo.schemas import TodoCreate, TodoUpdate, UserCreate, UserRead, UserUpdate
+from todo.users import current_active_user, auth_backend, fastapi_users
  
 
 app = FastAPI()
+
+app.include_router(fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"])
+app.include_router(fastapi_users.get_register_router(UserRead, UserCreate), prefix="/auth", tags=["auth"])
+app.include_router(fastapi_users.get_reset_password_router(), prefix="/auth", tags=["auth"])
+app.include_router(fastapi_users.get_verify_router(UserRead), prefix="/auth", tags=["auth"])
+app.include_router(fastapi_users.get_users_router(UserRead, UserUpdate), prefix="/users", tags=["users"])
+
 
 @app.get("/uploads")
 async def show_todo(session: AsyncSession = Depends(get_async_session)) -> dict:
@@ -108,8 +116,8 @@ async def update_todo(id: uuid.UUID, data: TodoUpdate, session: AsyncSession = D
 
 #=========================
 #Testing
-@app.get("/show")
-def show_posts() -> dict:
+@app.get("/testing")
+def testing() -> dict:
     return {"message": "Hello World"}
 
 
