@@ -4,9 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <h1>Hello World</h1>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    
+    <h1>Welcome to our todo list</h1>
+
+    <div id="create-todo">
+        <form id="create-form">
+
+            <div id="title-field">
+                <input type="text" id="caption" required placeholder="Enter your caption">
+            </div>
+
+            <div id="description-field">
+                <input type="text" id="description" required placeholder="Enter your description">
+            </div>
+
+            <div id="completed-field">
+                <input type="checkbox" id="completed" required placeholder="Enter your status">
+            </div>
+            <button id="create">Create Todo</button>
+        </form>
+    </div>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>
+                    <th>ID</th>
+                    <th>Caption</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="todo-table-body">
+        </tbody>
+    </table>
+
+    <dialog id="todo-dialog">
+
+        <input type="text" id="caption-dialog" required>
+        <input type="text" id="description-dialog" required>
+        <input type="checkbox" id="completed-dialog" required>
+
+        <button id="update">Update</button>
+        <button id="delete" style="background-color: red;">Delete</button>
+        <button id="close-dialog">Close</button>
+    </dialog>
+
+    <div id="todo-list"></div>
+
+    <script src="home.js" type="module"></script>
 </body>
 </html>

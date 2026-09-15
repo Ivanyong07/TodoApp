@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
-from db import get_async_session
-from models import Todo, User
+from todo.db import get_async_session
+from todo.models import Todo, User
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 import shutil
@@ -32,9 +32,9 @@ app.include_router(fastapi_users.get_users_router(UserRead, UserUpdate), prefix=
 
 
 @app.get("/uploads")
-async def show_todo(session: AsyncSession = Depends(get_async_session)) -> dict:
+async def show_todo(user: User = Depends(current_active_user), session: AsyncSession = Depends(get_async_session)) -> dict:
     
-    result = await session.execute(select(Todo).order_by(Todo.updated_at.desc()))
+    result = await session.execute(select(Todo).where(Todo.user_id == user.id).order_by(Todo.updated_at.desc()))
 
     todos = [row[0] for row in result.all()]
 
@@ -56,7 +56,7 @@ async def show_todo(session: AsyncSession = Depends(get_async_session)) -> dict:
 
     return {"todos":todo_data}
 
-@app.post("/uploads/")
+@app.post("/uploads")
 async def create_todo(data: TodoCreate,user: User = Depends(current_active_user), session: AsyncSession = Depends(get_async_session)) -> dict:
 
     todo = Todo(
@@ -98,18 +98,21 @@ async def delete_todo(id: uuid.UUID, user: User = Depends(current_active_user), 
         raise HTTPException(status_code=404, detail=str(e))
     
 
-    
 
 @app.put("/uploads/{id}")
 async def update_todo(id: uuid.UUID, data: TodoUpdate, session: AsyncSession = Depends(get_async_session), user: User = Depends(current_active_user)) -> dict:
 
-    result = await session(select(Todo).where(Todo.id == id))
+    result = await session.execute(select(Todo).where(Todo.id == id))
     todo = result.scalar_one_or_none()
 
     if todo is None:
         raise HTTPException(status_code=404, detail="Item not found")
+
+    print("TODO USER:", todo.user_id)
+    print("CURRENT USER:", user.id)
+
     
-    if Todo.id != id:
+    if todo.user_id != user.id:
         raise HTTPException(status_code=403, detail="You have no permission to delete this")
 
     todo.title = data.title

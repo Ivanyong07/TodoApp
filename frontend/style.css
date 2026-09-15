@@ -1,0 +1,46 @@
+body{
+    background:linear-gradient(135deg, black, purple);
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 100vh;
+}
+
+#login-box{
+    width: 300px;
+    height: 300px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+
+
+#login-box hr{
+    width: 80%;
+    transform: translateY(-30px);
+}
+
+#login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#email-field,
+#password-field{
+    display: flex;
+    flex-direction: column;
+}
+
+#email-field h5,
+#password-field h5 {
+    margin: 0 0 5px 0;
+}
+
+#email-field input,
+#password-field input {
+    margin-bottom: 10px;
+} 
