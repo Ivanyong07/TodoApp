@@ -123,7 +123,7 @@ async def update_todo(id: uuid.UUID, data: TodoUpdate, session: AsyncSession = D
     await session.commit()
     await session.refresh(todo)
 
-    return {"message":"Updated Successful", "ID": str(todo.id)}
+    return {"message":"Updated Successful", "ID": todo.id}
 
 
 
